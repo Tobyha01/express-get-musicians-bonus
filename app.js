@@ -25,6 +25,7 @@ async function seed(){
 
 }
 
+app.use(express.json())
 
 app.get('/', async (req, res) => {
 	res.send('<h1>Hello!</h1>')
@@ -61,7 +62,15 @@ app.put('/musicians/:id', async (req, res) => {
 //TODO: Make a GET Request to the Band model. 
 // The Band Model has an association with many musicians
 // 1. Respond with the Bands including the Musicians in that band.
-
+app.get("/bands", async function(request, response) {
+	try{
+		const band = await Band.findAll({include: Musician})
+		response.status(200).send(band)
+	}
+	catch(error){
+		response.status(500).send({error: error.message})
+	}
+})
 
 //TODO: Make a GET Request to the Band Model at a particular ID
 // The Band Model has an association with many musicians 
