@@ -76,6 +76,15 @@ app.get("/bands", async function(request, response) {
 // The Band Model has an association with many musicians 
 // 1. Respond with the paricular band including the musician in that particular band
 
+app.get("/bands/:id", async function(request, response) {
+	try{
+		const band = await Band.findByPk(request.params.id, {include: {model: Musician}})
+		response.status(200).send(band)
+	}
+	catch(error){
+		response.status(500).send({error: error.message})
+	}
+})
 
 app.listen(port, async () => {
 	await seed()
